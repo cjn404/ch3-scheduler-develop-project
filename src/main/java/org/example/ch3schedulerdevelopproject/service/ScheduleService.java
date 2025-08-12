@@ -6,7 +6,9 @@ import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
 import org.example.ch3schedulerdevelopproject.entity.Schedule;
+import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.ScheduleRepository;
+import org.example.ch3schedulerdevelopproject.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -19,11 +21,16 @@ import java.util.List;
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     // 생성
     @Transactional
-    public ScheduleResponse save(ScheduleRequest request) {
+    public ScheduleResponse save(Long userId, ScheduleRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User not found with id: " + userId)
+        );
         Schedule schedule = new Schedule(
+                user,
                 request.getPassword(),
                 request.getName(),
                 request.getTitle(),
@@ -43,8 +50,12 @@ public class ScheduleService {
 
     // 목록 조회
     @Transactional(readOnly = true)
-    public List<ScheduleResponse> findAll() {
-        List<Schedule> schedules = scheduleRepository.findAll();
+    public List<ScheduleResponse> findAll(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new EntityNotFoundException("User not found with id: " + userId)
+        );
+
+        List<Schedule> schedules = scheduleRepository.findAllByUser(user);
         List<ScheduleResponse> dtos = new ArrayList<>();
 
         for (Schedule schedule : schedules) {
@@ -63,8 +74,8 @@ public class ScheduleService {
 
     // 단건 조회
     @Transactional(readOnly = true)
-    public ScheduleResponse findOne(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+    public ScheduleResponse findOne(Long userId, Long scheduleId) {
+        Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
         return new ScheduleResponse(
@@ -79,8 +90,8 @@ public class ScheduleService {
 
     // 수정
     @Transactional
-    public ScheduleResponse updateSchedule(Long scheduleId, ScheduleRequest request) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+    public ScheduleResponse updateSchedule(Long userId, Long scheduleId, ScheduleRequest request) {
+        Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
         if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
@@ -101,8 +112,8 @@ public class ScheduleService {
 
     // 삭제
     @Transactional
-    public void deleteSchedule(Long scheduleId, ScheduleDeleteRequest request) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+    public void deleteSchedule(Long userId, Long scheduleId, ScheduleDeleteRequest request) {
+        Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
         if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
