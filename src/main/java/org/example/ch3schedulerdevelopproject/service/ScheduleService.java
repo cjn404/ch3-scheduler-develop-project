@@ -39,6 +39,9 @@ public class ScheduleService {
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
         return new ScheduleResponse(
+                savedSchedule.getUser().getId(),
+                savedSchedule.getUser().getName(),
+                savedSchedule.getUser().getEmail(),
                 savedSchedule.getId(),
                 savedSchedule.getName(),
                 savedSchedule.getTitle(),
@@ -60,6 +63,9 @@ public class ScheduleService {
 
         for (Schedule schedule : schedules) {
             ScheduleResponse scheduleResponse = new ScheduleResponse(
+                    schedule.getUser().getId(),
+                    schedule.getUser().getName(),
+                    schedule.getUser().getEmail(),
                     schedule.getId(),
                     schedule.getName(),
                     schedule.getTitle(),
@@ -79,6 +85,9 @@ public class ScheduleService {
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
         return new ScheduleResponse(
+                schedule.getUser().getId(),
+                schedule.getUser().getName(),
+                schedule.getUser().getEmail(),
                 schedule.getId(),
                 schedule.getName(),
                 schedule.getTitle(),
@@ -100,6 +109,9 @@ public class ScheduleService {
 
         schedule.updateSchedule(request.getName(), request.getTitle(), request.getContent());
         return new ScheduleResponse(
+                schedule.getUser().getId(),
+                schedule.getUser().getName(),
+                schedule.getUser().getEmail(),
                 schedule.getId(),
                 schedule.getName(),
                 schedule.getTitle(),

@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 @Getter
 public class ScheduleResponse {
 
+    private final Long userId;
+    private final String userName;
+    private final String userEmail;
     private final Long id;
     private final String name;
     private final String title;
@@ -15,6 +18,9 @@ public class ScheduleResponse {
     private final LocalDateTime modifiedAt;
 
     public ScheduleResponse(
+            Long userId,
+            String userName,
+            String userEmail,
             Long id,
             String name,
             String title,
@@ -22,6 +28,9 @@ public class ScheduleResponse {
             LocalDateTime createdAt,
             LocalDateTime modifiedAt
     ) {
+        this.userId = userId;
+        this.userName = userName;
+        this.userEmail = userEmail;
         this.id = id;
         this.name = name;
         this.title = title;
