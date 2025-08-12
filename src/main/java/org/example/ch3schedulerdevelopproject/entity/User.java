@@ -1,6 +1,5 @@
 package org.example.ch3schedulerdevelopproject.entity;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
