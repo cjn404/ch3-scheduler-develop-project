@@ -7,15 +7,15 @@ import java.time.LocalDateTime;
 @Getter
 public class UserResponse {
 
-    private final Long id;
-    private final String name;
+    private final Long userId;
+    private final String userName;
     private final String email;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
 
-    public UserResponse(Long id, String name, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
-        this.id = id;
-        this.name = name;
+    public UserResponse(Long userId, String userName, String email, LocalDateTime createdAt, LocalDateTime modifiedAt) {
+        this.userId = userId;
+        this.userName = userName;
         this.email = email;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;

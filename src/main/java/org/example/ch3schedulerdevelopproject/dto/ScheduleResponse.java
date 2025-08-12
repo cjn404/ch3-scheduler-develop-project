@@ -10,8 +10,8 @@ public class ScheduleResponse {
     private final Long userId;
     private final String userName;
     private final String userEmail;
-    private final Long id;
-    private final String name;
+    private final Long scheduleId;
+    private final String scheduleName;
     private final String title;
     private final String content;
     private final LocalDateTime createdAt;
@@ -21,8 +21,8 @@ public class ScheduleResponse {
             Long userId,
             String userName,
             String userEmail,
-            Long id,
-            String name,
+            Long scheduleId,
+            String scheduleName,
             String title,
             String content,
             LocalDateTime createdAt,
@@ -31,8 +31,8 @@ public class ScheduleResponse {
         this.userId = userId;
         this.userName = userName;
         this.userEmail = userEmail;
-        this.id = id;
-        this.name = name;
+        this.scheduleId = scheduleId;
+        this.scheduleName = scheduleName;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
