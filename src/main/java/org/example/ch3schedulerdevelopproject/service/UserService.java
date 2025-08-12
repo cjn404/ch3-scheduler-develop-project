@@ -106,7 +106,7 @@ public class UserService {
                 () -> new EntityNotFoundException("User with id " + userId + " not found")
         );
         // NSF하게 비밀번호 검증
-        if (!ObjectUtils.nullSafeEquals(user.getPassword(), user.getPassword())) {
+        if (!ObjectUtils.nullSafeEquals(user.getPassword(), request.getPassword())) {
             throw new IllegalStateException("Passwords do not match");
         }
         userRepository.delete(user);
