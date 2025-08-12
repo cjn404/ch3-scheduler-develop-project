@@ -2,6 +2,7 @@ package org.example.ch3schedulerdevelopproject.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
 import org.example.ch3schedulerdevelopproject.entity.Schedule;
@@ -100,11 +101,11 @@ public class ScheduleService {
 
     // 삭제
     @Transactional
-    public void deleteSchedule(Long scheduleId, String schedulePassword) {
+    public void deleteSchedule(Long scheduleId, ScheduleDeleteRequest request) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
-        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), schedule.getPassword())) {
+        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
             throw new IllegalStateException("Passwords do not match");
         }
         scheduleRepository.deleteById(scheduleId);

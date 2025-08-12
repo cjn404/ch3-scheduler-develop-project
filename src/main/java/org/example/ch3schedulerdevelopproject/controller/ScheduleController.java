@@ -1,6 +1,7 @@
 package org.example.ch3schedulerdevelopproject.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
 import org.example.ch3schedulerdevelopproject.service.ScheduleService;
@@ -51,9 +52,9 @@ public class ScheduleController {
     @DeleteMapping("/schedules/{scheduleId}")
     public void deleteSchedule(
             @PathVariable Long scheduleId,
-            @RequestBody String schedulePassword
+            @RequestBody ScheduleDeleteRequest request
     ) {
-        scheduleService.deleteSchedule(scheduleId, schedulePassword);
+        scheduleService.deleteSchedule(scheduleId, request);
     }
 
 }
