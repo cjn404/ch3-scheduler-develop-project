@@ -5,27 +5,37 @@ import org.example.ch3schedulerdevelopproject.auth.dto.AuthRequest;
 import org.example.ch3schedulerdevelopproject.auth.dto.AuthResponse;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public AuthResponse signup(AuthRequest request) {
-        User user = new User(request.getEmail(), request.getPassword());
+        // 비밀 번호 암호화(평문 -> 해시값)
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        User user = new User(encodedPassword, request.getName(), request.getEmail());
         userRepository.save(user);
-        return new AuthResponse(user.getId());
+        return new AuthResponse(user.getId(), user.getName(), user.getEmail());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AuthResponse login(AuthRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new IllegalArgumentException("Invalid email address provided")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
-        return new AuthResponse(user.getId());
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
+        }
+
+        return new AuthResponse(user.getId(), user.getName(), user.getEmail());
     }
 }

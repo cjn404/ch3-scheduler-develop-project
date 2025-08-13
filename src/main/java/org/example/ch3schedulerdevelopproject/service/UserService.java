@@ -7,9 +7,12 @@ import org.example.ch3schedulerdevelopproject.dto.UserRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserResponse;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +22,14 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 생성
     @Transactional
     public UserResponse save(UserRequest request) {
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
         User user = new User(
-                request.getPassword(),
+                encodedPassword,
                 request.getName(),
                 request.getEmail());
 
@@ -63,7 +68,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserResponse findOne(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("User with id " + userId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.") // 에러 코드 404
         );
         return new UserResponse(
                 user.getId(),
@@ -79,12 +84,15 @@ public class UserService {
     @Transactional
     public UserResponse update(Long userId, UserRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("User with id " + userId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.") // 에러 코드 404
         );
-        // NSF하게 비밀번호 검증
-        if (!ObjectUtils.nullSafeEquals(user.getPassword(), user.getPassword())) {
-            throw new IllegalStateException("Passwords do not match");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."); // 에러 코드 401
         }
+        // NSF하게 비밀번호 검증
+//        if (!ObjectUtils.nullSafeEquals(user.getPassword(), user.getPassword())) {
+//            throw new IllegalStateException("Passwords do not match");
+//        }
         return new UserResponse(
                 user.getId(),
                 user.getName(),
@@ -103,12 +111,15 @@ public class UserService {
     @Transactional
     public void delete(Long userId, UserDeleteRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("User with id " + userId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.") // 에러 코드 404
         );
-        // NSF하게 비밀번호 검증
-        if (!ObjectUtils.nullSafeEquals(user.getPassword(), request.getPassword())) {
-            throw new IllegalStateException("Passwords do not match");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
+        // NSF하게 비밀번호 검증
+//        if (!ObjectUtils.nullSafeEquals(user.getPassword(), request.getPassword())) {
+//            throw new IllegalStateException("Passwords do not match");
+//        }
         userRepository.delete(user);
     }
 }

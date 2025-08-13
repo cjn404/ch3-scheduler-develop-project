@@ -10,9 +10,12 @@ import org.example.ch3schedulerdevelopproject.entity.Schedule;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.ScheduleRepository;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +26,20 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     // 생성
     @Transactional
     public ScheduleResponse save(Long userId, ScheduleRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("User not found with id: " + userId)
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
+        // 평문 비밀번호 -> 해시 변환
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
         Schedule schedule = new Schedule(
                 user,
-                request.getPassword(),
+                encodedPassword,
                 request.getName(),
                 request.getTitle(),
                 request.getContent()
@@ -63,7 +70,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public List<ScheduleResponse> findAll(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new EntityNotFoundException("User not found with id: " + userId)
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
 
         List<Schedule> schedules = scheduleRepository.findAllByUser(user);
@@ -97,7 +104,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public ScheduleResponse findOne(Long userId, Long scheduleId) {
         Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
-                () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
         return new ScheduleResponse(
                 new UserResponse(
@@ -123,11 +130,14 @@ public class ScheduleService {
     @Transactional
     public ScheduleResponse updateSchedule(Long userId, Long scheduleId, ScheduleRequest request) {
         Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
-                () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
-        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
-            throw new IllegalStateException("Passwords do not match");
+        if (!passwordEncoder.matches(request.getPassword(), schedule.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
+//        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
+//            throw new IllegalStateException("Passwords do not match");
+//        }
 
         schedule.updateSchedule(request.getName(), request.getTitle(), request.getContent());
         return new ScheduleResponse(
@@ -155,11 +165,14 @@ public class ScheduleService {
     @Transactional
     public void deleteSchedule(Long userId, Long scheduleId, ScheduleDeleteRequest request) {
         Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
-                () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
-        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
-            throw new IllegalStateException("Passwords do not match");
+        if (!passwordEncoder.matches(request.getPassword(), schedule.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다.");
         }
+//        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
+//            throw new IllegalStateException("Passwords do not match");
+//        }
         scheduleRepository.deleteById(scheduleId);
     }
 }
