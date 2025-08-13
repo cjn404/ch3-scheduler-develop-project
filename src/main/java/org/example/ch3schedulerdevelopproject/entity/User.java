@@ -13,8 +13,14 @@ public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)   // 반드시 값이 있어야 함
     private String password;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(unique = true, nullable = false)    // 유니크 키 설정
     private String email;
 
     public User(String password, String name, String email) {
