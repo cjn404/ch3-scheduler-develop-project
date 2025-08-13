@@ -7,11 +7,11 @@ import org.example.ch3schedulerdevelopproject.auth.dto.AuthRequest;
 import org.example.ch3schedulerdevelopproject.auth.dto.AuthResponse;
 import org.example.ch3schedulerdevelopproject.auth.service.AuthService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Service
+@RestController
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -34,7 +34,7 @@ public class AuthController {
         AuthResponse result = authService.login(request);
 
         HttpSession session = servletRequest.getSession();  // 신규 세션 생성
-        session.setAttribute("LOGIN_USER", result.getId());
+        session.setAttribute("LOGIN_USER", result.getId()); // "sessionKey값"
         return ResponseEntity.ok(result);
     }
 
