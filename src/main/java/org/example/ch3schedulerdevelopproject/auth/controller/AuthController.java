@@ -21,7 +21,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signup(
             @RequestBody AuthRequest request
-    ) {
+            ) {
         AuthResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
     }
