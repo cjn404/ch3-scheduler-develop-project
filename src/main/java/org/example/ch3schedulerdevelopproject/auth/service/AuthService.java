@@ -20,8 +20,15 @@ public class AuthService {
 
     @Transactional
     public AuthResponse signup(AuthRequest request) {
+        // 이메일 중복 여부 확인
+        if(userRepository.existsByEmail(request.getEmail())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다.");
+        }
+
         // 비밀 번호 암호화(평문 -> 해시값)
         String encodedPassword = passwordEncoder.encode(request.getPassword());
+
+        // 유저 생성
         User user = new User(encodedPassword, request.getName(), request.getEmail());
         userRepository.save(user);
         return new AuthResponse(user.getId(), user.getName(), user.getEmail());
