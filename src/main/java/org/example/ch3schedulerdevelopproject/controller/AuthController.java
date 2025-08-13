@@ -1,11 +1,11 @@
-package org.example.ch3schedulerdevelopproject.auth.controller;
+package org.example.ch3schedulerdevelopproject.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.example.ch3schedulerdevelopproject.auth.dto.AuthRequest;
-import org.example.ch3schedulerdevelopproject.auth.dto.AuthResponse;
-import org.example.ch3schedulerdevelopproject.auth.service.AuthService;
+import org.example.ch3schedulerdevelopproject.dto.AuthRequest;
+import org.example.ch3schedulerdevelopproject.dto.AuthResponse;
+import org.example.ch3schedulerdevelopproject.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

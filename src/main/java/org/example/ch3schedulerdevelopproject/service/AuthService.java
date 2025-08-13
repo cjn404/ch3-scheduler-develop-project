@@ -1,8 +1,8 @@
-package org.example.ch3schedulerdevelopproject.auth.service;
+package org.example.ch3schedulerdevelopproject.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.ch3schedulerdevelopproject.auth.dto.AuthRequest;
-import org.example.ch3schedulerdevelopproject.auth.dto.AuthResponse;
+import org.example.ch3schedulerdevelopproject.dto.AuthRequest;
+import org.example.ch3schedulerdevelopproject.dto.AuthResponse;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package org.example.ch3schedulerdevelopproject.auth.dto;
+package org.example.ch3schedulerdevelopproject.dto;
 
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package org.example.ch3schedulerdevelopproject.auth.controller;
+package org.example.ch3schedulerdevelopproject.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
