@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
+import org.example.ch3schedulerdevelopproject.dto.UserResponse;
 import org.example.ch3schedulerdevelopproject.entity.Schedule;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.ScheduleRepository;
@@ -39,9 +40,16 @@ public class ScheduleService {
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
         return new ScheduleResponse(
-                savedSchedule.getUser().getId(),
-                savedSchedule.getUser().getName(),
-                savedSchedule.getUser().getEmail(),
+                new UserResponse( // 여기서 UserResponse 객체를 생성
+                        savedSchedule.getUser().getId(),
+                        savedSchedule.getUser().getName(),
+                        savedSchedule.getUser().getEmail(),
+                        savedSchedule.getUser().getCreatedAt(),
+                        savedSchedule.getUser().getModifiedAt()
+                ),
+//                savedSchedule.getUser().getId(),
+//                savedSchedule.getUser().getName(),
+//                savedSchedule.getUser().getEmail(),
                 savedSchedule.getId(),
                 savedSchedule.getName(),
                 savedSchedule.getTitle(),
@@ -63,9 +71,16 @@ public class ScheduleService {
 
         for (Schedule schedule : schedules) {
             ScheduleResponse scheduleResponse = new ScheduleResponse(
-                    schedule.getUser().getId(),
-                    schedule.getUser().getName(),
-                    schedule.getUser().getEmail(),
+                    new UserResponse(
+                            schedule.getUser().getId(),
+                            schedule.getUser().getName(),
+                            schedule.getUser().getEmail(),
+                            schedule.getUser().getCreatedAt(),
+                            schedule.getUser().getModifiedAt()
+                    ),
+//                    schedule.getUser().getId(),
+//                    schedule.getUser().getName(),
+//                    schedule.getUser().getEmail(),
                     schedule.getId(),
                     schedule.getName(),
                     schedule.getTitle(),
@@ -85,9 +100,16 @@ public class ScheduleService {
                 () -> new EntityNotFoundException("Schedule with id " + scheduleId + " not found")
         );
         return new ScheduleResponse(
-                schedule.getUser().getId(),
-                schedule.getUser().getName(),
-                schedule.getUser().getEmail(),
+                new UserResponse(
+                        schedule.getUser().getId(),
+                        schedule.getUser().getName(),
+                        schedule.getUser().getEmail(),
+                        schedule.getUser().getCreatedAt(),
+                        schedule.getUser().getModifiedAt()
+                ),
+//                schedule.getUser().getId(),
+//                schedule.getUser().getName(),
+//                schedule.getUser().getEmail(),
                 schedule.getId(),
                 schedule.getName(),
                 schedule.getTitle(),
@@ -109,9 +131,16 @@ public class ScheduleService {
 
         schedule.updateSchedule(request.getName(), request.getTitle(), request.getContent());
         return new ScheduleResponse(
-                schedule.getUser().getId(),
-                schedule.getUser().getName(),
-                schedule.getUser().getEmail(),
+                new UserResponse(
+                        schedule.getUser().getId(),
+                        schedule.getUser().getName(),
+                        schedule.getUser().getEmail(),
+                        schedule.getUser().getCreatedAt(),
+                        schedule.getUser().getModifiedAt()
+                ),
+//                schedule.getUser().getId(),
+//                schedule.getUser().getName(),
+//                schedule.getUser().getEmail(),
                 schedule.getId(),
                 schedule.getName(),
                 schedule.getTitle(),
