@@ -36,6 +36,10 @@ public class AuthController {
 
         HttpSession session = servletRequest.getSession();  // 신규 세션 생성
         session.setAttribute("LOGIN_USER", result.getId()); // "sessionKey값"
+
+        // 세션 만료 시간(30분) 설정
+        session.setMaxInactiveInterval(30 * 60);
+
         return ResponseEntity.ok(result);
     }
 
