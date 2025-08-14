@@ -19,7 +19,7 @@ public class AuthController {
     private final AuthService authService;
 
     // 회원 가입
-    @PostMapping("/signup")
+    @PostMapping("/users/signup")
     public ResponseEntity<AuthResponse> signup(
             @Valid @RequestBody AuthRequest request
     ) {
@@ -27,7 +27,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/users/login")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody AuthRequest request,
             HttpServletRequest servletRequest
@@ -43,7 +43,7 @@ public class AuthController {
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/logout")
+    @PostMapping("/users/logout")
     public void logout(HttpServletRequest servletRequest) {
         // 로그인하지 않으면 HttpSession -> Null로 반환
         HttpSession session = servletRequest.getSession(false);
