@@ -28,6 +28,25 @@ public class ScheduleService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 헬퍼 메서드 - 반환부 반복되는 코드 처리
+    private ScheduleResponse toScheduleResponse(Schedule schedule) {
+        return new ScheduleResponse(
+                new UserResponse(
+                        schedule.getUser().getId(),
+                        schedule.getUser().getName(),
+                        schedule.getUser().getEmail(),
+                        schedule.getUser().getCreatedAt(),
+                        schedule.getUser().getModifiedAt()
+                ),
+                schedule.getId(),
+                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
+                schedule.getTitle(),
+                schedule.getContent(),
+                schedule.getCreatedAt(),
+                schedule.getModifiedAt()
+        );
+    }
+
     // 생성
     @Transactional
     public ScheduleResponse save(Long userId, ScheduleRequest request) {
@@ -45,24 +64,7 @@ public class ScheduleService {
         );
         Schedule savedSchedule = scheduleRepository.save(schedule);
 
-        return new ScheduleResponse(
-                new UserResponse( // 여기서 UserResponse 객체를 생성
-                        savedSchedule.getUser().getId(),
-                        savedSchedule.getUser().getName(),
-                        savedSchedule.getUser().getEmail(),
-                        savedSchedule.getUser().getCreatedAt(),
-                        savedSchedule.getUser().getModifiedAt()
-                ),
-//                savedSchedule.getUser().getId(),
-//                savedSchedule.getUser().getName(),
-//                savedSchedule.getUser().getEmail(),
-                savedSchedule.getId(),
-                savedSchedule.getUser().getName(),  // Schedule name 대신 User name 사용
-                savedSchedule.getTitle(),
-                savedSchedule.getContent(),
-                savedSchedule.getCreatedAt(),
-                savedSchedule.getModifiedAt()
-        );
+        return toScheduleResponse(savedSchedule);
     }
 
     // 목록 조회
@@ -76,25 +78,7 @@ public class ScheduleService {
         List<ScheduleResponse> dtos = new ArrayList<>();
 
         for (Schedule schedule : schedules) {
-            ScheduleResponse scheduleResponse = new ScheduleResponse(
-                    new UserResponse(
-                            schedule.getUser().getId(),
-                            schedule.getUser().getName(),
-                            schedule.getUser().getEmail(),
-                            schedule.getUser().getCreatedAt(),
-                            schedule.getUser().getModifiedAt()
-                    ),
-//                    schedule.getUser().getId(),
-//                    schedule.getUser().getName(),
-//                    schedule.getUser().getEmail(),
-                    schedule.getId(),
-                    schedule.getUser().getName(),  // Schedule name 대신 User name 사용
-                    schedule.getTitle(),
-                    schedule.getContent(),
-                    schedule.getCreatedAt(),
-                    schedule.getModifiedAt()
-            );
-            dtos.add(scheduleResponse);
+            dtos.add(toScheduleResponse(schedule));
         }
         return dtos;
     }
@@ -105,24 +89,7 @@ public class ScheduleService {
         Schedule schedule = scheduleRepository.findByUser_IdAndId(userId, scheduleId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.")
         );
-        return new ScheduleResponse(
-                new UserResponse(
-                        schedule.getUser().getId(),
-                        schedule.getUser().getName(),
-                        schedule.getUser().getEmail(),
-                        schedule.getUser().getCreatedAt(),
-                        schedule.getUser().getModifiedAt()
-                ),
-//                schedule.getUser().getId(),
-//                schedule.getUser().getName(),
-//                schedule.getUser().getEmail(),
-                schedule.getId(),
-                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
-                schedule.getTitle(),
-                schedule.getContent(),
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt()
-        );
+        return toScheduleResponse(schedule);
     }
 
     // 수정
@@ -139,26 +106,8 @@ public class ScheduleService {
 //        }
 
         schedule.updateSchedule(request.getTitle(), request.getContent());
-        return new ScheduleResponse(
-                new UserResponse(
-                        schedule.getUser().getId(),
-                        schedule.getUser().getName(),
-                        schedule.getUser().getEmail(),
-                        schedule.getUser().getCreatedAt(),
-                        schedule.getUser().getModifiedAt()
-                ),
-//                schedule.getUser().getId(),
-//                schedule.getUser().getName(),
-//                schedule.getUser().getEmail(),
-                schedule.getId(),
-                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
-                schedule.getTitle(),
-                schedule.getContent(),
-                schedule.getCreatedAt(),
-                schedule.getModifiedAt()
-        );
+        return toScheduleResponse(schedule);
     }
-
 
     // 삭제
     @Transactional
@@ -172,6 +121,7 @@ public class ScheduleService {
 //        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
 //            throw new IllegalStateException("Passwords do not match");
 //        }
-        scheduleRepository.deleteById(scheduleId);
+        // 위에서 schedule 객체를 DB에서 조회했으므로, 해당 객체 바로 삭제
+        scheduleRepository.delete(schedule);
     }
 }

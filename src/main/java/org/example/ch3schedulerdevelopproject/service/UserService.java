@@ -2,9 +2,11 @@ package org.example.ch3schedulerdevelopproject.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
 import org.example.ch3schedulerdevelopproject.dto.UserDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserResponse;
+import org.example.ch3schedulerdevelopproject.entity.Schedule;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -43,6 +45,17 @@ public class UserService {
 //                savedUser.getModifiedAt());
 //    }
 
+    // 헬퍼 메서드 - 반환부 반복되는 코드 처리
+    private UserResponse toUserResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getModifiedAt()
+        );
+    }
+
     // 목록 조회
     // 특정 유저(ID)가 아니므로 findAll() 파라미터 없음
     @Transactional(readOnly = true)
@@ -51,14 +64,7 @@ public class UserService {
         List<User> users = userRepository.findAll();
         List<UserResponse> dtos = new ArrayList<>();
         for (User user : users) {
-            UserResponse userResponse = new UserResponse(
-                    user.getId(),
-                    user.getName(),
-                    user.getEmail(),
-                    user.getCreatedAt(),
-                    user.getModifiedAt()
-            );
-            dtos.add(userResponse);
+            dtos.add(toUserResponse(user));
         }
         return dtos;
     }
@@ -70,13 +76,7 @@ public class UserService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.") // 에러 코드 404
         );
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getModifiedAt()
-        );
+        return toUserResponse(user);
     }
 
     // 단건 수정
@@ -97,13 +97,7 @@ public class UserService {
         // DB 반영 코드
         user.updateUser(request.getName(), request.getEmail());
 
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getModifiedAt()
-        );
+        return toUserResponse(user);
     }
 
     // 단건 삭제
