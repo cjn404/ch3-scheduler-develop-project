@@ -62,5 +62,4 @@ public class ScheduleController {
     ) {
         scheduleService.deleteSchedule(userId, scheduleId, request);
     }
-
 }

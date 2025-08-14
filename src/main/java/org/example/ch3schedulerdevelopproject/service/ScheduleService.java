@@ -1,6 +1,5 @@
 package org.example.ch3schedulerdevelopproject.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -39,7 +37,7 @@ public class ScheduleService {
                         schedule.getUser().getModifiedAt()
                 ),
                 schedule.getId(),
-                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
+                schedule.getUser().getName(),  // scheduleAuthorName에 User name 동기화
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),
@@ -121,7 +119,7 @@ public class ScheduleService {
 //        if (!ObjectUtils.nullSafeEquals(schedule.getPassword(), request.getPassword())) {
 //            throw new IllegalStateException("Passwords do not match");
 //        }
-        // 위에서 schedule 객체를 DB에서 조회했으므로, 해당 객체 바로 삭제
+        // 위에서 DB에서 schedule 객체 조회했으므로, 조회 없이 해당 객체 바로 삭제
         scheduleRepository.delete(schedule);
     }
 }

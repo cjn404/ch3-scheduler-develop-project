@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signup(
             @Valid @RequestBody AuthRequest request
-            ) {
+    ) {
         AuthResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
     }

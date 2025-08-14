@@ -10,11 +10,8 @@ import java.time.LocalDateTime;
 public class ScheduleResponse {
 
     private final UserResponse userResponse;
-//    private final Long userId;
-//    private final String userName;
-//    private final String userEmail;
     private final Long scheduleId;
-    private final String scheduleName;
+    private final String scheduleAuthorName;
     private final String title;
     private final String content;
     private final LocalDateTime createdAt;
@@ -23,22 +20,16 @@ public class ScheduleResponse {
 
     public ScheduleResponse(
             UserResponse userResponse,
-//            Long userId,
-//            String userName,
-//            String userEmail,
             Long scheduleId,
-            String scheduleName,
+            String scheduleAuthorName,
             String title,
             String content,
             LocalDateTime createdAt,
             LocalDateTime modifiedAt
     ) {
         this.userResponse = userResponse;
-//        this.userId = userId;
-//        this.userName = userName;
-//        this.userEmail = userEmail;
         this.scheduleId = scheduleId;
-        this.scheduleName = scheduleName;
+        this.scheduleAuthorName = scheduleAuthorName;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;

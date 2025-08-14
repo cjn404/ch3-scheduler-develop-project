@@ -1,6 +1,5 @@
 package org.example.ch3schedulerdevelopproject.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.AuthRequest;
 import org.example.ch3schedulerdevelopproject.dto.AuthResponse;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
@@ -23,7 +21,7 @@ public class AuthService {
     @Transactional
     public AuthResponse signup(AuthRequest request) {
         // 이메일 중복 여부 확인
-        if(userRepository.existsByEmail(request.getEmail())) {
+        if (userRepository.existsByEmail(request.getEmail())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 사용중인 이메일입니다.");
         }
 

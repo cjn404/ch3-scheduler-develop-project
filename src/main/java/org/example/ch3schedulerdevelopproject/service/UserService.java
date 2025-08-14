@@ -1,19 +1,15 @@
 package org.example.ch3schedulerdevelopproject.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.example.ch3schedulerdevelopproject.dto.ScheduleResponse;
 import org.example.ch3schedulerdevelopproject.dto.UserDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserResponse;
-import org.example.ch3schedulerdevelopproject.entity.Schedule;
 import org.example.ch3schedulerdevelopproject.entity.User;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
