@@ -93,6 +93,10 @@ public class UserService {
 //        if (!ObjectUtils.nullSafeEquals(user.getPassword(), user.getPassword())) {
 //            throw new IllegalStateException("Passwords do not match");
 //        }
+
+        // DB 반영 코드
+        user.updateUser(request.getName(), request.getEmail());
+
         return new UserResponse(
                 user.getId(),
                 user.getName(),
