@@ -25,23 +25,23 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     // 생성
-    @Transactional
-    public UserResponse save(UserRequest request) {
-        String encodedPassword = passwordEncoder.encode(request.getPassword());
-        User user = new User(
-                encodedPassword,
-                request.getName(),
-                request.getEmail());
-
-        User savedUser = userRepository.save(user);
-
-        return new UserResponse(
-                savedUser.getId(),
-                savedUser.getName(),
-                savedUser.getEmail(),
-                savedUser.getCreatedAt(),
-                savedUser.getModifiedAt());
-    }
+//    @Transactional
+//    public UserResponse save(UserRequest request) {
+//        String encodedPassword = passwordEncoder.encode(request.getPassword());
+//        User user = new User(
+//                encodedPassword,
+//                request.getName(),
+//                request.getEmail());
+//
+//        User savedUser = userRepository.save(user);
+//
+//        return new UserResponse(
+//                savedUser.getId(),
+//                savedUser.getName(),
+//                savedUser.getEmail(),
+//                savedUser.getCreatedAt(),
+//                savedUser.getModifiedAt());
+//    }
 
     // 목록 조회
     // 특정 유저(ID)가 아니므로 findAll() 파라미터 없음

@@ -29,11 +29,11 @@ public class UserController {
      * @param request 생성할 사용자 정보
      * @return HTTP 200 OK와 함께 생성된 사용자 정보
      */
-    @PostMapping("/users")
-    public ResponseEntity<UserResponse> saveUser(
-            @RequestBody UserRequest request) {
-        return ResponseEntity.ok(userService.save(request));
-    }
+//    @PostMapping("/users")
+//    public ResponseEntity<UserResponse> saveUser(
+//            @RequestBody UserRequest request) {
+//        return ResponseEntity.ok(userService.save(request));
+//    }
 
     /** 목록 조회
      * URL(/users)에 GET 요청을 보내면 이 메서드가 실행
