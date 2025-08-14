@@ -40,7 +40,8 @@ public class LoginFilter implements Filter {
 
             // 로그인하지 않은 사용자인 경우
             if (session == null || session.getAttribute("LOGIN_USER") == null) {    // "sessionKey값"
-                throw new RuntimeException("로그인 해주세요.");
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인 해주세요.");   // 401 에러 코드
+                return; // 필터 종료
             }
 
             // 로그인 성공 로직

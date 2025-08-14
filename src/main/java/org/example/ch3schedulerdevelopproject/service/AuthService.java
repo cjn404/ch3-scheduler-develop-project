@@ -1,5 +1,6 @@
 package org.example.ch3schedulerdevelopproject.service;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.AuthRequest;
 import org.example.ch3schedulerdevelopproject.dto.AuthResponse;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service

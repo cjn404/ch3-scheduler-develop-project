@@ -2,6 +2,7 @@ package org.example.ch3schedulerdevelopproject.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.AuthRequest;
 import org.example.ch3schedulerdevelopproject.dto.AuthResponse;
@@ -20,7 +21,7 @@ public class AuthController {
     // 회원 가입
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> signup(
-            @RequestBody AuthRequest request
+            @Valid @RequestBody AuthRequest request
             ) {
         AuthResponse response = authService.signup(request);
         return ResponseEntity.ok(response);
@@ -28,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(
-            @RequestBody AuthRequest request,
+            @Valid @RequestBody AuthRequest request,
             HttpServletRequest servletRequest
     ) {
         AuthResponse result = authService.login(request);
