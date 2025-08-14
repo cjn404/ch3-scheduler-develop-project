@@ -1,5 +1,6 @@
 package org.example.ch3schedulerdevelopproject.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.ScheduleRequest;
@@ -20,7 +21,7 @@ public class ScheduleController {
     @PostMapping("/users/{userId}/schedules")
     public ResponseEntity<ScheduleResponse> saveSchedule(
             @PathVariable Long userId,
-            @RequestBody ScheduleRequest request
+            @Valid @RequestBody ScheduleRequest request
     ) {
         return ResponseEntity.ok(scheduleService.save(userId, request));
     }
@@ -47,7 +48,7 @@ public class ScheduleController {
     public ResponseEntity<ScheduleResponse> updateSchedule(
             @PathVariable Long userId,
             @PathVariable Long scheduleId,
-            @RequestBody ScheduleRequest request
+            @Valid @RequestBody ScheduleRequest request
     ) {
         return ResponseEntity.ok(scheduleService.updateSchedule(userId, scheduleId, request));
     }

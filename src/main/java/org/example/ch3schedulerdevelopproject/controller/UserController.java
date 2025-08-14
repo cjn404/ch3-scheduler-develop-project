@@ -1,5 +1,6 @@
 package org.example.ch3schedulerdevelopproject.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.ch3schedulerdevelopproject.dto.UserDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserRequest;
@@ -64,7 +65,7 @@ public class UserController {
     @PatchMapping("/users/{userId}")
     public ResponseEntity<UserResponse> updateUser(
             @PathVariable Long userId,
-            @RequestBody UserRequest request
+            @Valid @RequestBody UserRequest request
     ) {
         return ResponseEntity.ok(userService.update(userId, request));
     }
