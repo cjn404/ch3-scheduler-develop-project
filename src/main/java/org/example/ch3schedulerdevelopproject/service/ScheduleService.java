@@ -40,7 +40,6 @@ public class ScheduleService {
         Schedule schedule = new Schedule(
                 user,
                 encodedPassword,
-                request.getName(),
                 request.getTitle(),
                 request.getContent()
         );
@@ -58,7 +57,7 @@ public class ScheduleService {
 //                savedSchedule.getUser().getName(),
 //                savedSchedule.getUser().getEmail(),
                 savedSchedule.getId(),
-                savedSchedule.getName(),
+                savedSchedule.getUser().getName(),  // Schedule name 대신 User name 사용
                 savedSchedule.getTitle(),
                 savedSchedule.getContent(),
                 savedSchedule.getCreatedAt(),
@@ -89,7 +88,7 @@ public class ScheduleService {
 //                    schedule.getUser().getName(),
 //                    schedule.getUser().getEmail(),
                     schedule.getId(),
-                    schedule.getName(),
+                    schedule.getUser().getName(),  // Schedule name 대신 User name 사용
                     schedule.getTitle(),
                     schedule.getContent(),
                     schedule.getCreatedAt(),
@@ -118,7 +117,7 @@ public class ScheduleService {
 //                schedule.getUser().getName(),
 //                schedule.getUser().getEmail(),
                 schedule.getId(),
-                schedule.getName(),
+                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),
@@ -139,7 +138,7 @@ public class ScheduleService {
 //            throw new IllegalStateException("Passwords do not match");
 //        }
 
-        schedule.updateSchedule(request.getName(), request.getTitle(), request.getContent());
+        schedule.updateSchedule(request.getTitle(), request.getContent());
         return new ScheduleResponse(
                 new UserResponse(
                         schedule.getUser().getId(),
@@ -152,7 +151,7 @@ public class ScheduleService {
 //                schedule.getUser().getName(),
 //                schedule.getUser().getEmail(),
                 schedule.getId(),
-                schedule.getName(),
+                schedule.getUser().getName(),  // Schedule name 대신 User name 사용
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),

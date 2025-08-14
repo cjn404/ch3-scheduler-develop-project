@@ -12,9 +12,6 @@ public class ScheduleRequest {
     private String password;
 
     @NotBlank
-    private String name;
-
-    @NotBlank
     private String title;
 
     @NotBlank
