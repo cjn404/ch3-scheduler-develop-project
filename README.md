@@ -126,14 +126,13 @@ src
 
 ## API 명세서
 
-### 일정 CRUD
-| Method | Endpoint                               | Description                   | Parameters                | Request Body                                                               | Response                                                                                                                                                                         | Status Code    | Error Codes                         |
-| ------ | -------------------------------------- | ----------------------------- | ------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
-| POST   | /users/{userId}/schedules              | 일정 생성                         | userId (path)             | { "password": string } <br> { "title": string } <br> { "content": string } | { "scheduleId": long } <br> { "scheduleAuthorName": string } <br> { "title": string } <br> { "content": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 400 Bad Request <br> 404 Not Found  |
-| GET    | /users/{userId}/schedules              | 전체 일정 조회                      | userId (path)             | 없음                                                                         | \[ { "scheduleId": long } <br> { "scheduleAuthorName": string } <br> { "title": string } <br> { "content": string } <br> { "createdAt": string } <br> { "modifiedAt": string } ] | 200 OK         | 404 Not Found                       |
-| GET    | /users/{userId}/schedules/{scheduleId} | 선택 일정 조회                      | userId, scheduleId (path) | 없음                                                                         | { "scheduleId": long } <br> { "scheduleAuthorName": string } <br> { "title": string } <br> { "content": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 404 Not Found                       |
-| PATCH  | /users/{userId}/schedules/{scheduleId} | 선택 일정 수정 (작성자명 동기화, 제목/내용 수정) | userId, scheduleId (path) | { "password": string } <br> { "title": string } <br> { "content": string } | { "scheduleId": long } <br> { "scheduleAuthorName": string } <br> { "title": string } <br> { "content": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 404 Not Found <br> 401 UNAUTHORIZED |
-| DELETE | /users/{userId}/schedules/{scheduleId} | 선택 일정 삭제                      | userId, scheduleId (path) | { "password": string }                                                     | 없음                                                                                                                                                                               | 204 No Content | 404 Not Found <br> 401 UNAUTHORIZED |
+### 회원가입 및 로그인·로그아웃
+| Method | Endpoint      | Description | Parameters | Request Body                                                            | Response                                                        | Status Code    | Error Codes                                             |
+| ------ | ------------- | ----------- | ---------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- | -------------- | ------------------------------------------------------- |
+| POST   | /users/signup | 회원 가입       | 없음         | { "password": string } <br> { "name": string } <br> { "email": string } | { "id": long } <br> { "name": string } <br> { "email": string } | 200 OK         |  400 Bad Request  <br> 409 CONFLICT            |
+| POST   | /users/login  | 로그인         | 없음         | { "password": string } <br> { "name": string } <br> { "email": string } | { "id": long } <br> { "name": string } <br> { "email": string } | 200 OK         |  400 Bad Request <br> 401 UNAUTHORIZED <br> 404 Not Found |
+| POST   | /users/logout | 로그아웃        | 없음         | 없음                                                                      | 없음                                                              | 200 OK  | 없음                                                      |
+
 
 <br>
 
@@ -142,22 +141,26 @@ src
 | ------ | --------------- | ------------------------------- | ------------- | ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
 | GET    | /users          | 전체 사용자 조회                       | 없음            | 없음                                                                      | { "userId": long } <br> { "userName": string } <br> { "email": string } <br> { "createdAt": string } <br> { "modifiedAt": string }   | 200 OK         | 없음                                  |
 | GET    | /users/{userId} | 단건 사용자 조회                       | userId (path) | 없음                                                                      | { "userId": long } <br> { "userName": string } <br> { "email": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 404 Not Found                       |
-| PATCH  | /users/{userId} | 단건 사용자 수정 (비밀번호 검증 후 이름/이메일 수정) | userId (path) | { "password": string } <br> { "name": string } <br> { "email": string } | { "userId": long } <br> { "userName": string } <br> { "email": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 404 Not Found <br> 401 UNAUTHORIZED |
-| DELETE | /users/{userId} | 단건 사용자 삭제                       | userId (path) | { "password": string }                                                  | 없음                                                                                                                                      | 204 No Content | 404 Not Found <br> 401 UNAUTHORIZED |
-
-<br>
-
-### 회원가입 및 로그인·로그아웃
-| Method | Endpoint      | Description | Parameters | Request Body                                                            | Response                                                        | Status Code    | Error Codes                                             |
-| ------ | ------------- | ----------- | ---------- | ----------------------------------------------------------------------- | --------------------------------------------------------------- | -------------- | ------------------------------------------------------- |
-| POST   | /users/signup | 회원가입       | 없음         | { "password": string } <br> { "name": string } <br> { "email": string } | { "id": long } <br> { "name": string } <br> { "email": string } | 200 OK         | 409 CONFLICT (중복 이메일) <br> 400 Bad Request              |
-| POST   | /users/login  | 로그인         | 없음         | { "password": string } <br> { "name": string } <br> { "email": string } | { "id": long } <br> { "name": string } <br> { "email": string } | 200 OK         | 404 Not Found (이메일 없음) <br> 401 UNAUTHORIZED (비밀번호 불일치) |
-| POST   | /users/logout | 로그아웃        | 없음         | 없음                                                                      | 없음                                                              | 204 No Content | 없음                                                      |
+| PATCH  | /users/{userId} | 단건 사용자 수정 (비밀번호 검증 후 이름/이메일 수정) | userId (path) | { "password": string } <br> { "name": string } <br> { "email": string } | { "userId": long } <br> { "userName": string } <br> { "email": string } <br> { "createdAt": string } <br> { "modifiedAt": string }      | 200 OK         | 400 Bad Request<br> 401 UNAUTHORIZED <br> 404 Not Found  |
+| DELETE | /users/{userId} | 단건 사용자 삭제                       | userId (path) | { "password": string }                                                  | 없음                                                                                                                                      | 200 OK |  400 Bad Request<br> 401 UNAUTHORIZED <br> 404 Not Found |
 
 
 <br>
+
+### 일정 CRUD
+
+| Method | Endpoint                               | Description                   | Parameters                | Request Body                                                               | Response                                                                                                                                                                         | Status Code    | Error Codes                         |
+| ------ | -------------------------------------- | ----------------------------- | ------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------------------------------- |
+| POST   | /users/{userId}/schedules              | 일정 생성                         | userId (path)             | { "password": string } <br> { "title": string } <br> { "content": string } | { "user": { "userId": long } <br> "userName": string <br> "email": string <br> "createdAt": string <br> "modifiedAt": string} <br> { "schedule": { "scheduleId": long } <br> "scheduleAuthorName": string <br> "title": string <br> "content": string <br> "createdAt": string <br> "modifiedAt": string }| 200 OK         | 400 Bad Request <br> 404 Not Found  |
+| GET    | /users/{userId}/schedules              | 전체 일정 조회                      | userId (path)             | 없음                                                                        |  { "user": { "userId": long } <br> "userName": string <br> "email": string <br> "createdAt": string <br> "modifiedAt": string } <br> { "schedule": { "scheduleId": long } <br> "scheduleAuthorName": string <br> "title": string <br> "content": string <br> "createdAt": string <br> "modifiedAt": string }| 200 OK         | 404 Not Found                       |
+| GET    | /users/{userId}/schedules/{scheduleId} | 선택 일정 조회                      | userId, scheduleId (path) | 없음                                                                         |  { "user": { "userId": long } <br> "userName": string <br> "email": string <br> "createdAt": string <br> "modifiedAt": string} <br> { "schedule": { "scheduleId": long } <br> "scheduleAuthorName": string <br> "title": string <br> "content": string <br> "createdAt": string <br> "modifiedAt": string }| 200 OK         | 404 Not Found                       |
+| PATCH  | /users/{userId}/schedules/{scheduleId} | 선택 일정 수정 (작성자명 동기화, 제목/내용 수정) | userId, scheduleId (path) | { "password": string } <br> { "title": string } <br> { "content": string } |  { "user": { "userId": long } <br> "userName": string <br> "email": string <br> "createdAt": string <br> "modifiedAt": string} <br> { "schedule": { "scheduleId": long } <br> "scheduleAuthorName": string <br> "title": string <br> "content": string <br> "createdAt": string <br> "modifiedAt": string }| 200 OK         |  400 Bad Request <br>401 UNAUTHORIZED <br> 404 Not Found |
+| DELETE | /users/{userId}/schedules/{scheduleId} | 선택 일정 삭제                      | userId, scheduleId (path) | { "password": string }                                                     | 없음                                                                                                                                                                               | 200 OK | 400 Bad Request <br>401 UNAUTHORIZED <br> 404 Not Found |
+
+<br>
+
 
 ## ERD
 
-![](https://velog.velcdn.com/images/moi404/post/74380cb3-c0f3-4cc0-ae07-ae3a1867d1fd/image.png)
+<img width="369" height="1009" alt="Image" src="https://github.com/user-attachments/assets/2aa53871-9e29-4b6d-9120-0148330cf6b4" />
 
