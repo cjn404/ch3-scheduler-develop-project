@@ -5,6 +5,7 @@ import org.example.ch3schedulerdevelopproject.dto.UserDeleteRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserRequest;
 import org.example.ch3schedulerdevelopproject.dto.UserResponse;
 import org.example.ch3schedulerdevelopproject.entity.User;
+import org.example.ch3schedulerdevelopproject.repository.ScheduleRepository;
 import org.example.ch3schedulerdevelopproject.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +22,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ScheduleRepository scheduleRepository;
 
     // 생성
 //    @Transactional
@@ -104,6 +106,7 @@ public class UserService {
     // -> 비밀번호만 담는 PasswordRequest 또는 DeleteRequest DTO 별도 생성
     @Transactional
     public void delete(Long userId, UserDeleteRequest request) {
+        // 1. User 조회
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당하는 ID가 없습니다.") // 에러 코드 404
         );
@@ -114,6 +117,9 @@ public class UserService {
 //        if (!ObjectUtils.nullSafeEquals(user.getPassword(), request.getPassword())) {
 //            throw new IllegalStateException("Passwords do not match");
 //        }
+        // 자식 Schedule 먼저 삭제
+        scheduleRepository.deleteByUser_Id(userId);
+        // 부모 User 삭제
         userRepository.delete(user);
     }
 }
